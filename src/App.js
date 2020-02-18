@@ -1,10 +1,17 @@
 import React from 'react';
+import { Provider } from 'react-redux';
+import {
+    Container
+} from 'react-bootstrap';
+import store from './redux/store';
 
 function App() {
   return (
-    <div className="App">
-        <h1>Hello World</h1>
-    </div>
+    <Provider store={store}>
+        <Container className="mt-4">
+            <h1>Thermostat Demo</h1>
+        </Container>
+    </Provider>
   );
 }
 
