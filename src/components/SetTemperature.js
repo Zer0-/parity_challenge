@@ -8,6 +8,19 @@ import {
     FormControl
 } from 'react-bootstrap';
 
+const min_allowed_temp = 0;
+const max_allowed_temp = 40;
+
+function validateTemp(callback, newTemp) {
+    newTemp = Number(newTemp);
+
+    if (newTemp) {
+        let callbackTemp =
+            Math.min(Math.max(min_allowed_temp, newTemp), max_allowed_temp);
+        callback(callbackTemp);
+    }
+}
+
 function SetTemperature(props) {
     return (
         <Row className="justify-content-md-center mt-4">
@@ -19,7 +32,7 @@ function SetTemperature(props) {
                     <FormControl
                         type="number"
                         value={props.currentTemp}
-                        onChange={t => props.setTemp(t.target.value)}
+                        onChange={t => validateTemp(props.setTemp, t.target.value)}
                         size="lg"
                         min="0"
                     />

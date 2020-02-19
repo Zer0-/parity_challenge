@@ -6,10 +6,7 @@ export const changeMode = newMode => ({
     payload: newMode
 });
 
-export const setTemp = newTemp => {
-    console.log("newTemp:", newTemp);
-    return ({
-        type: SET_TEMP,
-        payload: newTemp
-    });
-};
+export const setTemp = newTemp => ({
+    type: SET_TEMP,
+    payload: newTemp
+});
