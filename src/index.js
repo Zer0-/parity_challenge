@@ -1,8 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { sagaMiddleware } from './redux/store';
+import rootSaga from './sagas';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+
+sagaMiddleware.run(rootSaga);
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
