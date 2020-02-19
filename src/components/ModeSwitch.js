@@ -14,29 +14,35 @@ import {
 } from '../redux/reducers/thermostat';
 
 const buttonInfo = {
-    [MODE_HEAT]: 'Heat',
     [MODE_COOL]: 'Cool',
+    [MODE_HEAT]: 'Heat',
     [MODE_AUTO]: 'Auto'
 };
 
 function ModeSwitch(props) {
-    /*
-     * How do we hightlight the right button?
-     *
-     * all secondary unless the current mode matches it
-     */
     return (
-        <Row className="justify-content-md-center mt-4">
+        <Row className="justify-content-md-center mt-4 mb-4">
             <Col md="auto">
                 <ButtonGroup size="lg">
                     {
                         Object.entries(buttonInfo).map(([mode, txt]) => {
-                            let variant =
-                                mode === props.currentMode ? 'primary' : 'secondary';
+                            let variant, handler;
+
+                            if (mode === props.currentMode) {
+                                variant = 'primary';
+                                handler = null;
+                            } else {
+                                variant = 'secondary';
+                                handler = props.changeMode.bind(this, mode);
+                            }
+                            let disabled =
+                                mode === MODE_COOL && props.cool_disabled;
                             return (
                                 <Button
+                                    disabled={disabled}
                                     key={mode}
                                     variant={variant}
+                                    onClick={handler}
                                 >{txt}</Button>
                             );
                         })
@@ -48,6 +54,6 @@ function ModeSwitch(props) {
 }
 
 export default connect(
-    store => ({ currentMode: store.user_set_mode }),
+    store => ({ currentMode: store.user_set_mode, cool_disabled: false /* TODO */ }),
     { changeMode }
 )(ModeSwitch);

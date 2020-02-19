@@ -10,13 +10,14 @@ import {
 
 const min_allowed_temp = 0;
 const max_allowed_temp = 40;
+const step = 0.5;
 
-function validateTemp(callback, newTemp) {
-    newTemp = Number(newTemp);
+function validateTemp(callback, new_temp) {
+    new_temp = Number(new_temp);
 
-    if (newTemp) {
+    if (new_temp) {
         let callbackTemp =
-            Math.min(Math.max(min_allowed_temp, newTemp), max_allowed_temp);
+            Math.min(Math.max(min_allowed_temp, new_temp), max_allowed_temp);
         callback(callbackTemp);
     }
 }
@@ -35,6 +36,7 @@ function SetTemperature(props) {
                         onChange={t => validateTemp(props.setTemp, t.target.value)}
                         size="lg"
                         min="0"
+                        step={step}
                     />
                 </InputGroup>
             </Col>

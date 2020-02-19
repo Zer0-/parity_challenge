@@ -1,3 +1,9 @@
+import {
+    CHANGE_MODE,
+    SET_TEMP,
+    LOAD_STORE
+} from '../messages';
+
 export const MODE_HEAT = 'MODE_HEAT';
 export const MODE_COOL = 'MODE_COOL';
 export const MODE_AUTO = 'MODE_AUTO';
@@ -33,6 +39,27 @@ const initialState = {
 
 export default function(state = initialState, action) {
     switch (action.type) {
+        case (CHANGE_MODE): {
+            let new_mode = action.payload;
+
+            if (new_mode === state.user_set_mode) {
+                return state;
+            }
+
+            return {
+                ...state,
+                user_set_mode: new_mode
+            }
+        }
+        case (SET_TEMP): {
+            return {
+                ...state,
+                user_set_temperature: action.payload
+            }
+        }
+        case (LOAD_STORE): {
+            return { ...action.payload };
+        }
         default:
             return state;
     }
