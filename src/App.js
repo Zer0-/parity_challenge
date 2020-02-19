@@ -15,6 +15,7 @@ import {
     getStatusValueIdx,
     getModeValueIdx
 } from './components/IndicatorLight';
+import ModeSwitch from './components/ModeSwitch';
 
 const degC = '\u00b0C';
 
@@ -60,10 +61,11 @@ function App() {
                         opStateToOption={getStatusValueIdx}
                     />
                     <IndicatorLight
-                        label="Mode"
+                        label="Current Mode"
                         values={MODE_VALUES}
                         opStateToOption={getModeValueIdx}
                     />
+                    <ModeSwitch/>
                 </Col>
             </Row>
         </Container>

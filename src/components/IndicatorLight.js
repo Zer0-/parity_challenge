@@ -26,6 +26,7 @@ export function getStatusValueIdx(store) {
 }
 
 export function getModeValueIdx(store) {
+    //TODO
     return 1;
 }
 
@@ -37,7 +38,7 @@ function IndicatorLight(props) {
             <Col sm={4}><h4>{props.label}</h4></Col>
             {
                 props.values.map((val, i) => {
-                    let variant = onIdx == i ? 'success' : 'secondary';
+                    let variant = onIdx === i ? 'success' : 'secondary';
 
                     return (
                         <Col sm={4} key={i}>
