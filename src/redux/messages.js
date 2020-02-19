@@ -1,20 +1,18 @@
 export const CHANGE_MODE = 'CHANGE_MODE';
 export const SET_TEMP = 'SET_TEMP';
 export const LOAD_STORE = 'LOAD_STORE';
+export const DEVICE_REGISTERED_SUCCESS = 'DEVICE_REGISTERED_SUCCESS';
+export const DEVICE_REGISTERED_FAIL = 'DEVICE_REGISTERED_FAIL';
 
-export const changeMode = newMode => ({
-    type: CHANGE_MODE,
-    payload: newMode
-});
+function payloadIsArgs(type) {
+    return payload => ({
+        type: type,
+        payload
+    });
+}
 
-export const setTemp = newTemp => ({
-    type: SET_TEMP,
-    payload: newTemp
-});
-
-export const loadStore = saved_store => ({
-    type: LOAD_STORE,
-    payload: saved_store
-});
-
-
+export const changeMode   = payloadIsArgs(CHANGE_MODE);
+export const setTemp      = payloadIsArgs(SET_TEMP);
+export const loadStore    = payloadIsArgs(LOAD_STORE);
+export const registerOk   = payloadIsArgs(DEVICE_REGISTERED_SUCCESS);
+export const registerFail = payloadIsArgs(DEVICE_REGISTERED_FAIL);

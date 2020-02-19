@@ -2,10 +2,15 @@ import { takeLatest, call, put, select } from 'redux-saga/effects';
 import {
     CHANGE_MODE,
     SET_TEMP,
-    loadStore
+    loadStore,
+    registerOk,
+    registerFail
 } from './redux/messages';
+import { registerDevice } from './network';
 
 const localstorage_key = 'thermostat.store';
+
+const identity = a => a;
 
 function loadFromStorage() {
     return new Promise((resolve, reject) => {
@@ -35,8 +40,6 @@ function saveToLocalStorage(store) {
     });
 }
 
-const identity = a => a;
-
 function* saveState() {
     let store = yield select(identity);
     yield call(saveToLocalStorage, store);
@@ -52,6 +55,22 @@ function* setTemp(new_temp) {
     yield* saveState();
 }
 
+function* maybeRegisterDevice() {
+    let device_uuid = yield select(store => store.device_uuid);
+
+    if (!device_uuid) {
+        console.log("device_uuid:", device_uuid);
+        try {
+            let result = yield call(registerDevice);
+            console.log('api ok', result);
+            yield put(registerOk(result));
+        } catch (e) {
+            console.error(e);
+            yield put(registerFail(e));
+        }
+    }
+}
+
 function* storageInitialization() {
     try {
         console.log("Loading");
@@ -64,12 +83,9 @@ function* storageInitialization() {
     }
 }
 
-//call loadFromStorage (which should return a promise)
-//yield a LOAD_STORE with payload
-//if we CHANGE_MODE or SET_TEMP call saveToLocalStorage
-
 function* thermostatSaga() {
     yield* storageInitialization();
+    yield* maybeRegisterDevice();
     yield takeLatest(CHANGE_MODE, changeMode);
     yield takeLatest(SET_TEMP, setTemp);
 }
