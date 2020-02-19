@@ -13,12 +13,13 @@ import {
     MODE_AUTO
 } from '../redux/reducers/thermostat';
 
+const buttonInfo = {
+    [MODE_HEAT]: 'Heat',
+    [MODE_COOL]: 'Cool',
+    [MODE_AUTO]: 'Auto'
+};
+
 function ModeSwitch(props) {
-    const buttonInfo = {
-        MODE_HEAT: 'Heat',
-        MODE_COOL: 'Cool',
-        MODE_AUTO: 'Auto'
-    };
     /*
      * How do we hightlight the right button?
      *
@@ -27,14 +28,14 @@ function ModeSwitch(props) {
     return (
         <Row className="justify-content-md-center mt-4">
             <Col md="auto">
-                <ButtonGroup size="lg" className="mt-4">
+                <ButtonGroup size="lg">
                     {
                         Object.entries(buttonInfo).map(([mode, txt]) => {
                             let variant =
-                                mode == props.currentMode ? 'primary' : 'secondary';
+                                mode === props.currentMode ? 'primary' : 'secondary';
                             return (
                                 <Button
-                                    key={variant}
+                                    key={mode}
                                     variant={variant}
                                 >{txt}</Button>
                             );

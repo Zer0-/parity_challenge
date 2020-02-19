@@ -31,8 +31,8 @@ export function getModeValueIdx(store) {
 }
 
 function IndicatorLight(props) {
-    console.log('IndicatorLight');
     let onIdx = props.onValIdx;
+
     return (
         <Row className="mt-4 flex-nowrap">
             <Col sm={4}><h4>{props.label}</h4></Col>
