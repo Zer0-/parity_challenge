@@ -1,23 +1,24 @@
-export const STATUS_STANDBY = 'STATUS_STANDBY';
-export const STATUS_ON = 'STATUS_STANDBY';
-
 export const MODE_HEAT = 'MODE_HEAT';
 export const MODE_COOL = 'MODE_COOL';
 export const MODE_AUTO = 'MODE_AUTO';
+export const MODE_STANDBY = 'MODE_STANDBY';
 
 const initialState = {
     /*
      * This object represents averaged values, not raw api values.
      * All temperature values will be a Number representing deg. celsius
      */
+    /*
     sensor_values: {
         temperature: null,
         outside_temperature: null,
         humidity: null
     },
-    operating_state: {
-        current_status: STATUS_STANDBY,
-        current_mode: MODE_HEAT
+    */
+    sensor_values: {
+        temperature: 24,
+        outside_temperature: -1,
+        humidity: 10
     },
     /*
      * Since there is no API to tell the thermostat to regulate itself
@@ -25,6 +26,7 @@ const initialState = {
      * set by the user, and our interface will actually control the thermostat
      * by setting it's _internal_ mode to one of cool, heat, standby.
      */
+    operating_mode: MODE_STANDBY,
     user_set_mode: MODE_AUTO,
     user_set_temperature: 20
 };

@@ -1,3 +1,8 @@
 * {
-    outline: 1px solid red;
+    /*outline: 1px solid red;*/
+}
+
+.indicatorLight {
+    min-width: 2rem;
+    min-height: 2rem;
 }

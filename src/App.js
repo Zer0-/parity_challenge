@@ -8,6 +8,13 @@ import {
 import store from './redux/store';
 import './App.css';
 import ValueDisplayBox from './components/ValueDisplayBox';
+import IndicatorLight from './components/IndicatorLight';
+import {
+    STATUS_VALUES,
+    MODE_VALUES,
+    getStatusValueIdx,
+    getModeValueIdx
+} from './components/IndicatorLight';
 
 const degC = '\u00b0C';
 
@@ -18,7 +25,7 @@ function App() {
             <Row><Col><h2>Thermostat Demo</h2></Col></Row>
             <Row>
                 <Col lg={6}>
-                    <Row>
+                    <Row className="mb-1">
                         <Col>
                             <ValueDisplayBox
                                 title="Temperature"
@@ -27,7 +34,7 @@ function App() {
                             />
                         </Col>
                     </Row>
-                    <Row>
+                    <Row className="mb-1">
                         <Col>
                             <ValueDisplayBox
                                 title="Outside Temperature"
@@ -46,7 +53,18 @@ function App() {
                         </Col>
                     </Row>
                 </Col>
-                <Col lg={6}>B</Col>
+                <Col lg={6}>
+                    <IndicatorLight
+                        label="Status"
+                        values={STATUS_VALUES}
+                        opStateToOption={getStatusValueIdx}
+                    />
+                    <IndicatorLight
+                        label="Mode"
+                        values={MODE_VALUES}
+                        opStateToOption={getModeValueIdx}
+                    />
+                </Col>
             </Row>
         </Container>
     </Provider>
