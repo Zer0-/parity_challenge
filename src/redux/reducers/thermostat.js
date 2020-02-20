@@ -3,14 +3,15 @@ import {
     SET_TEMP,
     LOAD_STORE,
     DEVICE_REGISTERED_SUCCESS,
-    SENSORS_UPDATE
+    SENSORS_UPDATE,
+    OP_MODE_UPDATE
 } from '../messages';
 
 export const MODE_OFF       = 'MODE_OFF';
 export const MODE_COOL      = 'MODE_COOL';
 export const MODE_HEAT      = 'MODE_HEAT';
-export const MODE_AUTO_COOL = 'MODE_COOL';
-export const MODE_AUTO_HEAT = 'MODE_HEAT';
+export const MODE_AUTO_COOL = 'MODE_AUTO_COOL';
+export const MODE_AUTO_HEAT = 'MODE_AUTO_HEAT';
 export const MODE_STANDBY   = 'MODE_STANDBY';
 export const MODE_AUTO      = 'MODE_AUTO'; // for user set value
 
@@ -139,8 +140,13 @@ export default function(state = initialState, action) {
         case (SENSORS_UPDATE): {
             return {
                 ...state,
-                sensor_values: action.payload.sensor_values,
-                operating_mode: action.payload.operating_mode
+                sensor_values: action.payload,
+            }
+        }
+        case (OP_MODE_UPDATE): {
+            return {
+                ...state,
+                operating_mode: action.payload
             }
         }
         default:

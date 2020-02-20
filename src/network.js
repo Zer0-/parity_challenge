@@ -70,7 +70,10 @@ export function sensorDetail(tstart, tend, slug) {
 }
 
 export function setThermostatMode(device_id, mode) {
-    return patch(THERMOSTAT_URL + device_id, { state: modeToApiVal(mode) });
+    return patch(
+        THERMOSTAT_URL + device_id + '/',
+        { state: modeToApiVal[mode] }
+    );
 }
 
 export function getThermostatMode(device_id) {

@@ -12,15 +12,16 @@ import {
     loadStore,
     registerOk,
     registerFail,
-    sensorsUpdate
+    sensorsUpdate,
+    updateOpMode
 } from './redux/messages';
 import {
     registerDevice,
     sensorsOverview,
     sensorDetail,
-    getThermostatMode
+    setThermostatMode
 } from './network';
-import { average, apiValToMode } from './redux/reducers/thermostat';
+import { average, thermostatMode } from './redux/reducers/thermostat';
 
 const localstorage_key = 'thermostat.state';
 const api_poll_interval_seconds = 60;
@@ -63,13 +64,21 @@ function* saveState() {
     yield call(saveToLocalStorage, state);
 }
 
-function* changeMode(new_mode) {
+function* changeMode(action) {
+    let new_mode = action.payload;
     console.log('changeMode saga gen. new_mode value:', new_mode);
+    let state = yield select(identity);
+    let new_state = {...state, user_set_mode: new_mode};
+    yield* updateOperatingMode(new_state);
     yield* saveState();
 }
 
-function* setTemp(new_temp) {
+function* setTemp(action) {
+    let new_temp = action.payload;
     console.log('setTemp saga gen. new_temp value:', new_temp);
+    let state = yield select(identity);
+    let new_state = {...state, user_set_temperature: new_temp};
+    yield* updateOperatingMode(new_state);
     yield* saveState();
 }
 
@@ -114,14 +123,20 @@ function getSensorSeries(overview) {
     return call(sensorDetail, tstart, tend, overview.slug);
 }
 
+function* updateOperatingMode(state) {
+    let new_mode = thermostatMode(state);
+
+    if (new_mode !== state.operating_mode) {
+        yield call(setThermostatMode, state.device_id, new_mode);
+        yield put(updateOpMode(new_mode));
+    }
+
+    return new_mode;
+}
+
 function* fetchAllDataAndUpdate() {
     try {
         let [ outdoor, indoor, humidity ] = yield call(sensorsOverview);
-        let state = yield select(identity);
-
-        // also GET the thermostat's current state,
-        // in case something other than our app changes it.
-        let stat = yield call(getThermostatMode, state.device_id);
 
         let _indoor_temp_series = (yield getSensorSeries(indoor)).data_points;
         let _outdoor_temp_series = (yield getSensorSeries(outdoor)).data_points;
@@ -142,16 +157,16 @@ function* fetchAllDataAndUpdate() {
         console.log('temp:', indoor_temp);
         console.log('outdoor temp:', outdoor_temp);
 
+        let state = yield select(identity);
+        yield* updateOperatingMode(state);
+
         // TODO: detect illegal state when outdoor temp drops below zero while
         // we are in MODE_COOL
 
         yield putResolve(sensorsUpdate({
-            sensor_values: {
-                temperature: indoor_temp,
-                outside_temperature: outdoor_temp,
-                humidity: Number(humidity.latest_value)
-            },
-            operating_mode: apiValToMode[stat.state]
+            temperature: indoor_temp,
+            outside_temperature: outdoor_temp,
+            humidity: Number(humidity.latest_value)
         }));
         yield* saveState();
     } catch (e) {
