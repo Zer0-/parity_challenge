@@ -1,0 +1,282 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div
+  className="mt-4 container"
+>
+  <div
+    className="row"
+  >
+    <div
+      className="col"
+    >
+      <h2>
+        Thermostat Demo
+      </h2>
+    </div>
+  </div>
+  <div
+    className="row"
+  >
+    <div
+      className="col-lg-6"
+    >
+      <div
+        className="mb-1 row"
+      >
+        <div
+          className="col"
+        >
+          <div
+            className="card"
+          >
+            <div
+              className="card-body"
+            >
+              <div
+                className="card-title h5"
+              >
+                Temperature
+              </div>
+              <h1>
+                <span />
+                <span>
+                  °C
+                </span>
+              </h1>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        className="mb-1 row"
+      >
+        <div
+          className="col"
+        >
+          <div
+            className="card"
+          >
+            <div
+              className="card-body"
+            >
+              <div
+                className="card-title h5"
+              >
+                Outside Temperature
+              </div>
+              <h1>
+                <span />
+                <span>
+                  °C
+                </span>
+              </h1>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        className="row"
+      >
+        <div
+          className="col"
+        >
+          <div
+            className="card"
+          >
+            <div
+              className="card-body"
+            >
+              <div
+                className="card-title h5"
+              >
+                Humidity
+              </div>
+              <h1>
+                <span />
+                <span>
+                  %
+                </span>
+              </h1>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="col-lg-6"
+    >
+      <div
+        className="mt-4 flex-nowrap row"
+      >
+        <div
+          className="col-sm-4"
+        >
+          <h4>
+            Status
+          </h4>
+        </div>
+        <div
+          className="col-sm-4"
+        >
+          <div
+            className="justify-content-md-center row"
+          >
+            <span
+              className="indicatorLight badge badge-secondary"
+            >
+              <span />
+            </span>
+          </div>
+          <div
+            className="justify-content-md-center row"
+          >
+            Standby
+          </div>
+        </div>
+        <div
+          className="col-sm-4"
+        >
+          <div
+            className="justify-content-md-center row"
+          >
+            <span
+              className="indicatorLight badge badge-secondary"
+            >
+              <span />
+            </span>
+          </div>
+          <div
+            className="justify-content-md-center row"
+          >
+            On
+          </div>
+        </div>
+      </div>
+      <hr />
+      <div
+        className="mt-4 flex-nowrap row"
+      >
+        <div
+          className="col-sm-4"
+        >
+          <h4>
+            Current Mode
+          </h4>
+        </div>
+        <div
+          className="col-sm-4"
+        >
+          <div
+            className="justify-content-md-center row"
+          >
+            <span
+              className="indicatorLight badge badge-secondary"
+            >
+              <span />
+            </span>
+          </div>
+          <div
+            className="justify-content-md-center row"
+          >
+            Heat
+          </div>
+        </div>
+        <div
+          className="col-sm-4"
+        >
+          <div
+            className="justify-content-md-center row"
+          >
+            <span
+              className="indicatorLight badge badge-secondary"
+            >
+              <span />
+            </span>
+          </div>
+          <div
+            className="justify-content-md-center row"
+          >
+            Cool
+          </div>
+        </div>
+      </div>
+      <div
+        className="justify-content-md-center mt-4 row"
+      >
+        <div
+          className="mb-4 mt-4 col-md-auto"
+        >
+          <div
+            className="btn-group btn-group-lg"
+            role="group"
+          >
+            <button
+              className="btn btn-secondary"
+              disabled={false}
+              onClick={[Function]}
+              type="button"
+            >
+              Cool
+            </button>
+            <button
+              className="btn btn-secondary"
+              disabled={false}
+              onClick={[Function]}
+              type="button"
+            >
+              Heat
+            </button>
+            <button
+              className="btn btn-secondary"
+              disabled={false}
+              onClick={[Function]}
+              type="button"
+            >
+              Auto
+            </button>
+            <button
+              className="btn btn-primary"
+              disabled={false}
+              onClick={null}
+              type="button"
+            >
+              Off
+            </button>
+          </div>
+        </div>
+      </div>
+      <div
+        className="justify-content-md-center mt-4 mb-4 row"
+      >
+        <div
+          className="setTemp col-md-auto"
+        >
+          <div
+            className="input-group"
+          >
+            <div
+              className="input-group-prepend"
+            >
+              <span
+                className="input-group-text"
+              >
+                Temperature
+              </span>
+            </div>
+            <input
+              className="form-control form-control-lg"
+              disabled={true}
+              min="0"
+              onChange={[Function]}
+              step={0.5}
+              type="number"
+              value={20}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
