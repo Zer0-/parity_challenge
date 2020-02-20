@@ -17,11 +17,12 @@ import {
 import {
     registerDevice,
     sensorsOverview,
-    sensorDetail
+    sensorDetail,
+    getThermostatMode
 } from './network';
-import { average } from './redux/reducers/thermostat';
+import { average, apiValToMode } from './redux/reducers/thermostat';
 
-const localstorage_key = 'thermostat.store';
+const localstorage_key = 'thermostat.state';
 const api_poll_interval_seconds = 60;
 
 const identity = a => a;
@@ -45,21 +46,21 @@ function loadFromStorage() {
     });
 }
 
-function saveToLocalStorage(store) {
-    console.log('saveToLocalStorage:', store);
+function saveToLocalStorage(state) {
+    console.log('saveToLocalStorage:', state);
     return new Promise(resolve => {
         resolve(
             window.localStorage.setItem(
                 localstorage_key,
-                JSON.stringify(store)
+                JSON.stringify(state)
             )
         );
     });
 }
 
 function* saveState() {
-    let store = yield select(identity);
-    yield call(saveToLocalStorage, store);
+    let state = yield select(identity);
+    yield call(saveToLocalStorage, state);
 }
 
 function* changeMode(new_mode) {
@@ -73,7 +74,7 @@ function* setTemp(new_temp) {
 }
 
 function* maybeRegisterDevice() {
-    let device_id = yield select(store => store.device_id);
+    let device_id = yield select(state => state.device_id);
 
     if (!device_id) {
         console.log("device_id:", device_id);
@@ -92,7 +93,7 @@ function* maybeRegisterDevice() {
 function* storageInitialization() {
     try {
         let saved_store = yield call(loadFromStorage);
-        console.log("Loaded store from localStorage");
+        console.log("Loaded state from localStorage");
         yield put(loadStore(saved_store));
     } catch {
         console.log("Did not load from localStorage");
@@ -116,12 +117,11 @@ function getSensorSeries(overview) {
 function* fetchAllDataAndUpdate() {
     try {
         let [ outdoor, indoor, humidity ] = yield call(sensorsOverview);
+        let state = yield select(identity);
 
-        /*
-         * let uuid_hash = yield select(s => s.device_id);
-         * we might also want to GET the thermostat's current state,
-         * in case something other than our app changes it.
-         */
+        // also GET the thermostat's current state,
+        // in case something other than our app changes it.
+        let stat = yield call(getThermostatMode, state.device_id);
 
         let _indoor_temp_series = (yield getSensorSeries(indoor)).data_points;
         let _outdoor_temp_series = (yield getSensorSeries(outdoor)).data_points;
@@ -129,8 +129,6 @@ function* fetchAllDataAndUpdate() {
         let [indoor_temp_series, outdoor_temp_series] =
             [_indoor_temp_series, _outdoor_temp_series]
                 .map(s => s.map(x => Number(x.value)));
-
-        console.log('indoor_temp_series:', indoor_temp_series)
 
         if (indoor_temp_series.length < 3 || outdoor_temp_series.length < 3) {
             // should we retry here? Alert the user somehow? Log it for now.
@@ -144,10 +142,16 @@ function* fetchAllDataAndUpdate() {
         console.log('temp:', indoor_temp);
         console.log('outdoor temp:', outdoor_temp);
 
+        // TODO: detect illegal state when outdoor temp drops below zero while
+        // we are in MODE_COOL
+
         yield putResolve(sensorsUpdate({
-            temperature: indoor_temp,
-            outside_temperature: outdoor_temp,
-            humidity: Number(humidity.latest_value)
+            sensor_values: {
+                temperature: indoor_temp,
+                outside_temperature: outdoor_temp,
+                humidity: Number(humidity.latest_value)
+            },
+            operating_mode: apiValToMode[stat.state]
         }));
         yield* saveState();
     } catch (e) {

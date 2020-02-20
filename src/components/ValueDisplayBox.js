@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 function ValueDisplayBox(props) {
     var displayValue =
-        props.value ? props.value.toFixed(props.precision) : null;
+        props.value ? Number(props.value.toFixed(props.precision)) : null;
 
     return (
         <Card>

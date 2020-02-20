@@ -11,13 +11,15 @@ import {
     MODE_HEAT,
     MODE_COOL,
     MODE_AUTO,
+    MODE_OFF,
     disableCooling
 } from '../redux/reducers/thermostat';
 
 const buttonInfo = {
     [MODE_COOL]: 'Cool',
     [MODE_HEAT]: 'Heat',
-    [MODE_AUTO]: 'Auto'
+    [MODE_AUTO]: 'Auto',
+    [MODE_OFF]: 'Off'
 };
 
 function ModeSwitch(props) {

@@ -3,7 +3,7 @@ import { modeToApiVal } from './redux/reducers/thermostat';
 const API_URL_BASE = 'https://api-staging.paritygo.com/sensors/api';
 export const REGISTER_URL = API_URL_BASE + '/thermostat/register/';
 export const SENSORS_URL = API_URL_BASE + '/sensors/';
-export const MODE_SET_URL = API_URL_BASE + '/thermostat/';//needs uuid-hash
+export const THERMOSTAT_URL = API_URL_BASE + '/thermostat/';//needs uuid-hash
 
 function resolveResponse(resolve, reject) {
     return e => {
@@ -70,5 +70,9 @@ export function sensorDetail(tstart, tend, slug) {
 }
 
 export function setThermostatMode(device_id, mode) {
-    return patch(MODE_SET_URL + device_id, { state: modeToApiVal(mode) });
+    return patch(THERMOSTAT_URL + device_id, { state: modeToApiVal(mode) });
+}
+
+export function getThermostatMode(device_id) {
+    return get(THERMOSTAT_URL + device_id);
 }

@@ -6,14 +6,20 @@ import {
     SENSORS_UPDATE
 } from '../messages';
 
-export const MODE_COOL = 'MODE_COOL';
-export const MODE_HEAT = 'MODE_HEAT';
-export const MODE_AUTO = 'MODE_AUTO';
-export const MODE_STANDBY = 'MODE_STANDBY';
+export const MODE_OFF       = 'MODE_OFF';
+export const MODE_COOL      = 'MODE_COOL';
+export const MODE_HEAT      = 'MODE_HEAT';
+export const MODE_AUTO_COOL = 'MODE_COOL';
+export const MODE_AUTO_HEAT = 'MODE_HEAT';
+export const MODE_STANDBY   = 'MODE_STANDBY';
+export const MODE_AUTO      = 'MODE_AUTO'; // for user set value
 
 const stateMapping = [
+    [MODE_OFF, 'off'],
     [MODE_HEAT, 'heat'],
     [MODE_COOL, 'cool'],
+    [MODE_AUTO_COOL, 'auto_cool'],
+    [MODE_AUTO_HEAT, 'auto_heat'],
     [MODE_STANDBY, 'auto_standby']
 ];
 
@@ -37,15 +43,31 @@ export const average = a => a.reduce((i, j) => i + j, 0) / a.length;
 
 //Compute the mode the thermostat should be in given the current state
 export function thermostatMode(state) {
+    let { temperature, outside_temperature } = state.sensor_values;
+    let user_temp = state.user_set_temperature;
+
     switch (state.user_set_mode) {
         case (MODE_COOL): {
-            break;
+            if (outside_temperature < 0) {
+                return MODE_OFF;
+            } else {
+                return MODE_COOL;
+            }
         }
         case (MODE_HEAT): {
-            break;
+            return MODE_HEAT;
         }
         case (MODE_AUTO): {
-            break;
+            if (user_temp > temperature) {
+                return MODE_AUTO_HEAT;
+            } else if (temperature > user_temp && !disableCooling(state)) {
+                return MODE_AUTO_COOL;
+            } else {
+                return MODE_STANDBY;
+            }
+        }
+        case (MODE_OFF): {
+            return MODE_OFF;
         }
         default: {
             console.error("user_set_mode set to illegal state");
@@ -79,8 +101,8 @@ const initialState = {
      * set by the user, and our interface will actually control the thermostat
      * by setting it's _internal_ mode to one of cool, heat, standby.
      */
-    operating_mode: MODE_STANDBY,
-    user_set_mode: MODE_AUTO,
+    operating_mode: MODE_OFF,
+    user_set_mode: MODE_OFF,
     user_set_temperature: 20
 };
 
@@ -117,7 +139,8 @@ export default function(state = initialState, action) {
         case (SENSORS_UPDATE): {
             return {
                 ...state,
-                sensor_values: action.payload
+                sensor_values: action.payload.sensor_values,
+                operating_mode: action.payload.operating_mode
             }
         }
         default:
