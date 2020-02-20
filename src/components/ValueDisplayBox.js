@@ -4,12 +4,15 @@ import { Card } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
 function ValueDisplayBox(props) {
+    var displayValue =
+        props.value ? props.value.toFixed(props.precision) : null;
+
     return (
         <Card>
             <Card.Body>
                 <Card.Title>{props.title}</Card.Title>
                 <h1>
-                    <span>{props.value}</span>
+                    <span>{displayValue}</span>
                     <span>{props.unit}</span>
                 </h1>
             </Card.Body>
@@ -23,7 +26,8 @@ ValueDisplayBox.propTypes = {
     //one of 'temperature', 'outside_temperature', 'humidity'
     sensor: PropTypes.string,
 
-    unit: PropTypes.string
+    unit: PropTypes.string,
+    precision: PropTypes.number
 };
 
 export default connect(

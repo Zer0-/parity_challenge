@@ -1,9 +1,13 @@
+import { modeToApiVal } from './redux/reducers/thermostat';
+
 const API_URL_BASE = 'https://api-staging.paritygo.com/sensors/api';
 export const REGISTER_URL = API_URL_BASE + '/thermostat/register/';
+export const SENSORS_URL = API_URL_BASE + '/sensors/';
+export const MODE_SET_URL = API_URL_BASE + '/thermostat/';//needs uuid-hash
 
 function resolveResponse(resolve, reject) {
     return e => {
-        if (e.target.status === 200) {
+        if (e.target.status >= 200 && e.target.status < 300) {
             return resolve(JSON.parse(e.target.responseText));
         } else {
             reject(new Error('API responded with ' + e.target.status));
@@ -52,7 +56,19 @@ export function patch(url, payload) {
 }
 
 */
+
 export function registerDevice() {
-    return get(REGISTER_URL);
-    //return post(REGISTER_URL, { state: 'auto_standby' });
+    return post(REGISTER_URL, { state: 'auto_standby' });
+}
+
+export function sensorsOverview() {
+    return get(SENSORS_URL);
+}
+
+export function sensorDetail(tstart, tend, slug) {
+    return get(SENSORS_URL + slug + `?begin=${tstart}&end=${tend}`);
+}
+
+export function setThermostatMode(device_id, mode) {
+    return patch(MODE_SET_URL + device_id, { state: modeToApiVal(mode) });
 }

@@ -10,7 +10,8 @@ import {
 import {
     MODE_HEAT,
     MODE_COOL,
-    MODE_AUTO
+    MODE_AUTO,
+    disableCooling
 } from '../redux/reducers/thermostat';
 
 const buttonInfo = {
@@ -54,6 +55,9 @@ function ModeSwitch(props) {
 }
 
 export default connect(
-    store => ({ currentMode: store.user_set_mode, cool_disabled: false /* TODO */ }),
+    store => ({
+        currentMode: store.user_set_mode,
+        cool_disabled: disableCooling(store)
+    }),
     { changeMode }
 )(ModeSwitch);

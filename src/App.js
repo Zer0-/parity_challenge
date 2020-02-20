@@ -33,6 +33,7 @@ function App() {
                                 title="Temperature"
                                 sensor="temperature"
                                 unit={degC}
+                                precision={1}
                             />
                         </Col>
                     </Row>
@@ -42,6 +43,7 @@ function App() {
                                 title="Outside Temperature"
                                 sensor="outside_temperature"
                                 unit={degC}
+                                precision={1}
                             />
                         </Col>
                     </Row>
@@ -51,6 +53,7 @@ function App() {
                                 title="Humidity"
                                 sensor="humidity"
                                 unit="%"
+                                precision={0}
                             />
                         </Col>
                     </Row>

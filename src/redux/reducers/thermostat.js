@@ -2,11 +2,12 @@ import {
     CHANGE_MODE,
     SET_TEMP,
     LOAD_STORE,
-    DEVICE_REGISTERED_SUCCESS
+    DEVICE_REGISTERED_SUCCESS,
+    SENSORS_UPDATE
 } from '../messages';
 
-export const MODE_HEAT = 'MODE_HEAT';
 export const MODE_COOL = 'MODE_COOL';
+export const MODE_HEAT = 'MODE_HEAT';
 export const MODE_AUTO = 'MODE_AUTO';
 export const MODE_STANDBY = 'MODE_STANDBY';
 
@@ -18,29 +19,58 @@ const stateMapping = [
 
 export const modeToApiVal = stateMapping.reduce(
     (o, [x, y]) => Object.assign(o, {[x]: y}),
-    {});
+    {}
+);
 
 
 export const apiValToMode = stateMapping.reduce(
     (o, [x, y]) => Object.assign(o, {[y]: x}),
-    {});
+    {}
+);
+
+
+/*
+ * Thermostat logic functions
+ */
+
+export const average = a => a.reduce((i, j) => i + j, 0) / a.length;
+
+//Compute the mode the thermostat should be in given the current state
+export function thermostatMode(state) {
+    switch (state.user_set_mode) {
+        case (MODE_COOL): {
+            break;
+        }
+        case (MODE_HEAT): {
+            break;
+        }
+        case (MODE_AUTO): {
+            break;
+        }
+        default: {
+            console.error("user_set_mode set to illegal state");
+            return state.operating_mode;
+        }
+    }
+}
+
+export const disableCooling = state =>
+    state.sensor_values.outside_temperature < 0;
+
+
+/*
+ * Redux state and reducer
+ */
 
 const initialState = {
     /*
      * This object represents averaged values, not raw api values.
      * All temperature values will be a Number representing deg. celsius
      */
-    /*
     sensor_values: {
         temperature: null,
         outside_temperature: null,
         humidity: null
-    },
-    */
-    sensor_values: {
-        temperature: 24,
-        outside_temperature: -1,
-        humidity: 10
     },
     device_id: null,
     /*
@@ -78,14 +108,17 @@ export default function(state = initialState, action) {
             return { ...action.payload };
         }
         case (DEVICE_REGISTERED_SUCCESS): {
-            let newState = {
+            return {
                 ...state,
                 device_id: action.payload.uid_hash,
                 operating_mode: apiValToMode[action.payload.state]
             };
-            console.log(action.payload);
-            console.log("DEVICE_REGISTERED_SUCCESS, newState:", newState);
-            return newState;
+        }
+        case (SENSORS_UPDATE): {
+            return {
+                ...state,
+                sensor_values: action.payload
+            }
         }
         default:
             return state;
