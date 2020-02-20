@@ -24,8 +24,8 @@ const buttonInfo = {
 
 function ModeSwitch(props) {
     return (
-        <Row className="justify-content-md-center mt-4 mb-4">
-            <Col md="auto">
+        <Row className="justify-content-md-center mt-4">
+            <Col md="auto" className="mb-4 mt-4">
                 <ButtonGroup size="lg">
                     {
                         Object.entries(buttonInfo).map(([mode, txt]) => {

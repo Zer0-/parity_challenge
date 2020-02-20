@@ -70,8 +70,8 @@ function App() {
                         values={MODE_VALUES}
                         opStateToOption={getModeValueIdx}
                     />
-                    <SetTemperature/>
                     <ModeSwitch/>
+                    <SetTemperature/>
                 </Col>
             </Row>
         </Container>

@@ -7,6 +7,7 @@ import {
     InputGroup,
     FormControl
 } from 'react-bootstrap';
+import { MODE_AUTO } from '../redux/reducers/thermostat';
 
 const min_allowed_temp = 0;
 const max_allowed_temp = 40;
@@ -24,8 +25,8 @@ function validateTemp(callback, new_temp) {
 
 function SetTemperature(props) {
     return (
-        <Row className="justify-content-md-center mt-4">
-            <Col md="auto" className="mb-4 mt-4 setTemp">
+        <Row className="justify-content-md-center mt-4 mb-4">
+            <Col md="auto" className="setTemp">
                 <InputGroup>
                     <InputGroup.Prepend>
                         <InputGroup.Text>Temperature</InputGroup.Text>
@@ -37,6 +38,7 @@ function SetTemperature(props) {
                         size="lg"
                         min="0"
                         step={step}
+                        disabled={props.isDisabled}
                     />
                 </InputGroup>
             </Col>
@@ -45,6 +47,9 @@ function SetTemperature(props) {
 }
 
 export default connect(
-    store => ({ currentTemp: store.user_set_temperature }),
+    store => ({
+        currentTemp: store.user_set_temperature,
+        isDisabled: store.user_set_mode !== MODE_AUTO
+    }),
     { setTemp }
 )(SetTemperature);
