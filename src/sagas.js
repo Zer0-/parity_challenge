@@ -157,17 +157,20 @@ function* fetchAllDataAndUpdate() {
         console.log('temp:', indoor_temp);
         console.log('outdoor temp:', outdoor_temp);
 
-        let state = yield select(identity);
-        yield* updateOperatingMode(state);
-
-        // TODO: detect illegal state when outdoor temp drops below zero while
-        // we are in MODE_COOL
-
-        yield putResolve(sensorsUpdate({
+        let sensor_values = {
             temperature: indoor_temp,
             outside_temperature: outdoor_temp,
             humidity: Number(humidity.latest_value)
-        }));
+        };
+
+        let new_state = {
+            ...yield select(identity),
+            sensor_values
+        };
+
+        yield* updateOperatingMode(new_state);
+
+        yield putResolve(sensorsUpdate(sensor_values));
         yield* saveState();
     } catch (e) {
         console.error(e);
@@ -179,13 +182,6 @@ function* pollApis() {
         yield* fetchAllDataAndUpdate();
         yield delay(api_poll_interval_seconds * 1000);
     }
-    // load sensors overview - for displaying humidity ✓
-    // get endpoint names from initial request data
-    // load thermostat/hash to get current state (in case an outside source
-    // changed this)
-    // get latest three values from sensors api
-    // - note that in a real scenario we should check if the latest data
-    // is more than 10 minutes old and warn the user
 }
 
 function* thermostatSaga() {

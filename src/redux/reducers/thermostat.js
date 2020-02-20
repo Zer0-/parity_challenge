@@ -138,10 +138,17 @@ export default function(state = initialState, action) {
             };
         }
         case (SENSORS_UPDATE): {
-            return {
+            let new_state = {
                 ...state,
                 sensor_values: action.payload,
             }
+
+            if (new_state.user_set_mode === MODE_COOL
+                && disableCooling(new_state)) {
+                new_state.user_set_mode = MODE_OFF;
+            }
+
+            return new_state;
         }
         case (OP_MODE_UPDATE): {
             return {
