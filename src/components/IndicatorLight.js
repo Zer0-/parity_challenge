@@ -6,11 +6,13 @@ import {
     Col,
     Badge
 } from 'react-bootstrap';
-/*
 import {
+    MODE_COOL,
+    MODE_HEAT,
+    MODE_AUTO_COOL,
+    MODE_AUTO_HEAT,
     MODE_STANDBY
 } from '../redux/reducers/thermostat';
-*/
 
 export const STATUS_VALUES = [ "Standby", "On"]; 
 export const MODE_VALUES = [ "Heat", "Cool"]; 
@@ -21,13 +23,30 @@ export const MODE_VALUES = [ "Heat", "Cool"];
  * to the thermostat.
  */
 export function getStatusValueIdx(store) {
-    //TODO
-    return 0;
+    if ((new Set([
+            MODE_HEAT,
+            MODE_COOL,
+            MODE_AUTO_HEAT,
+            MODE_AUTO_COOL])).has(store.operating_mode)) {
+        return 1;
+    } else if (store.operating_mode === MODE_STANDBY) {
+        return 0;
+    } else {
+        return -1;
+    }
 }
 
 export function getModeValueIdx(store) {
-    //TODO
-    return 1;
+    if ((new Set([
+            MODE_COOL,
+            MODE_AUTO_COOL,
+            MODE_STANDBY])).has(store.operating_mode)) {
+        return 1;
+    } else if ((new Set([MODE_HEAT, MODE_AUTO_HEAT])).has(store.operating_mode)) {
+        return 0;
+    } else {
+        return -1;
+    }
 }
 
 function IndicatorLight(props) {
